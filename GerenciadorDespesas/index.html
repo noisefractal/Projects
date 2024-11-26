@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Despesas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gerenciador de Despesas</h1>
+        
+        <!-- Formulário de Cadastro de Despesas -->
+        <form id="expense-form">
+            <div>
+                <label for="expense-name">Descrição:</label>
+                <input type="text" id="expense-name" required>
+            </div>
+            <div>
+                <label for="expense-amount">Valor (R$):</label>
+                <input type="number" id="expense-amount" required>
+            </div>
+            <div>
+                <label for="expense-category">Categoria:</label>
+                <select id="expense-category" required>
+                    <option value="Alimentação">Alimentação</option>
+                    <option value="Transporte">Transporte</option>
+                    <option value="Lazer">Lazer</option>
+                    <option value="Outros">Outros</option>
+                </select>
+            </div>
+            <div>
+                <label for="expense-date">Data:</label>
+                <input type="date" id="expense-date" required>
+            </div>
+            <button type="submit">Adicionar Despesa</button>
+        </form>
+        
+        <!-- Lista de Despesas -->
+        <h2>Minhas Despesas</h2>
+        <ul id="expense-list"></ul>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+<!-- Formulário de Cadastro de Usuário -->
+<form id="register-form">
+    <h2>Cadastre-se</h2>
+    <div>
+        <label for="register-email">E-mail:</label>
+        <input type="email" id="register-email" required>
+    </div>
+    <div>
+        <label for="register-password">Senha:</label>
+        <input type="password" id="register-password" required>
+    </div>
+    <button type="submit">Registrar</button>
+</form>
+<!-- Formulário de Login de Usuário -->
+<form id="login-form">
+    <h2>Login</h2>
+    <div>
+        <label for="login-email">E-mail:</label>
+        <input type="email" id="login-email" required>
+    </div>
+    <div>
+        <label for="login-password">Senha:</label>
+        <input type="password" id="login-password" required>
+    </div>
+    <button type="submit">Entrar</button>
+</form>
