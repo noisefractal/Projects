@@ -10,36 +10,41 @@
     <div class="container">
         <h1>Gerenciador de Despesas</h1>
 
-        <!-- Formulário de Cadastro de Usuário -->
-        <form id="register-form">
-            <h2>Cadastre-se</h2>
-            <div>
-                <label for="register-email">E-mail:</label>
-                <input type="email" id="register-email" required>
-            </div>
-            <div>
-                <label for="register-password">Senha:</label>
-                <input type="password" id="register-password" required>
-            </div>
-            <button type="submit">Registrar</button>
-        </form>
+        <!-- Tela de Cadastro -->
+        <section id="register-section">
+            <form id="register-form">
+                <h2>Cadastre-se</h2>
+                <div>
+                    <label for="register-email">E-mail:</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div>
+                    <label for="register-password">Senha:</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                <button type="submit">Registrar</button>
+            </form>
+        </section>
 
-        <!-- Formulário de Login de Usuário -->
-        <form id="login-form">
-            <h2>Login</h2>
-            <div>
-                <label for="login-email">E-mail:</label>
-                <input type="email" id="login-email" required>
-            </div>
-            <div>
-                <label for="login-password">Senha:</label>
-                <input type="password" id="login-password" required>
-            </div>
-            <button type="submit">Entrar</button>
-        </form>
+        <!-- Tela de Login -->
+        <section id="login-section" style="display: none;">
+            <form id="login-form">
+                <h2>Login</h2>
+                <div>
+                    <label for="login-email">E-mail:</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div>
+                    <label for="login-password">Senha:</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit">Entrar</button>
+            </form>
+        </section>
 
-        <!-- Área de Gerenciamento de Despesas -->
-        <div id="expense-section" style="display: none;">
+        <!-- Tela de Gerenciamento de Despesas -->
+        <section id="expense-section" style="display: none;">
+            <button id="logout-btn">Sair</button>
             <h2>Adicionar Despesa</h2>
             <form id="expense-form">
                 <div>
@@ -68,10 +73,11 @@
 
             <h2>Histórico de Despesas</h2>
             <ul id="expense-list"></ul>
-        </div>
+        </section>
     </div>
 
     <script src="app.js"></script>
 </body>
 </html>
+
 

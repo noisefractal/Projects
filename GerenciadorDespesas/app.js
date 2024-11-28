@@ -1,70 +1,31 @@
-// Capturando elementos do DOM
+// Captura de elementos do DOM
+const registerSection = document.getElementById('register-section');
+const loginSection = document.getElementById('login-section');
+const expenseSection = document.getElementById('expense-section');
 const registerForm = document.getElementById('register-form');
 const loginForm = document.getElementById('login-form');
 const expenseForm = document.getElementById('expense-form');
 const expenseList = document.getElementById('expense-list');
-const expenseSection = document.getElementById('expense-section');
+const logoutBtn = document.getElementById('logout-btn');
 
-// Armazenamento local para despesas
+// Variáveis globais
+let users = JSON.parse(localStorage.getItem('users')) || [];
 let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
 
-// Função para exibir as despesas na lista
-function displayExpenses() {
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-    expenseList.innerHTML = '';
+// Funções de controle de exibição
+function showSection(section) {
+    registerSection.style.display = 'none';
+    loginSection.style.display = 'none';
+    expenseSection.style.display = 'none';
 
-    // Filtrar despesas do usuário logado
-    const userExpenses = expenses.filter(expense => expense.user === loggedInUser.email);
-
-    userExpenses.forEach((expense, index) => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            ${expense.name} - R$${expense.amount} - ${expense.category} - ${expense.date}
-            <button onclick="deleteExpense(${index})">Excluir</button>
-        `;
-        expenseList.appendChild(li);
-    });
+    section.style.display = 'block';
 }
 
-// Função para adicionar uma nova despesa
-function addExpense(e) {
-    e.preventDefault();
-
-    const expenseName = document.getElementById('expense-name').value;
-    const expenseAmount = document.getElementById('expense-amount').value;
-    const expenseCategory = document.getElementById('expense-category').value;
-    const expenseDate = document.getElementById('expense-date').value;
-
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-
-    const expense = {
-        name: expenseName,
-        amount: parseFloat(expenseAmount).toFixed(2),
-        category: expenseCategory,
-        date: expenseDate,
-        user: loggedInUser.email
-    };
-
-    expenses.push(expense);
-    localStorage.setItem('expenses', JSON.stringify(expenses));
-    displayExpenses();
-    expenseForm.reset();
-}
-
-// Função para excluir uma despesa
-function deleteExpense(index) {
-    expenses.splice(index, 1);
-    localStorage.setItem('expenses', JSON.stringify(expenses));
-    displayExpenses();
-}
-
-// Função para registrar o usuário
-function registerUser(e) {
+// Registro de usuário
+registerForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('register-email').value;
     const password = document.getElementById('register-password').value;
-
-    const users = JSON.parse(localStorage.getItem('users')) || [];
 
     if (users.some(user => user.email === email)) {
         alert('Usuário já cadastrado!');
@@ -75,48 +36,80 @@ function registerUser(e) {
     localStorage.setItem('users', JSON.stringify(users));
     alert('Usuário registrado com sucesso!');
     registerForm.reset();
-}
+    showSection(loginSection);
+});
 
-// Função para logar o usuário
-function loginUser(e) {
+// Login de usuário
+loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
 
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    const validUser = users.find(user => user.email === email && user.password === password);
-
-    if (validUser) {
-        localStorage.setItem('loggedInUser', JSON.stringify(validUser));
+    const user = users.find(u => u.email === email && u.password === password);
+    if (user) {
+        localStorage.setItem('loggedInUser', JSON.stringify(user));
         alert('Login bem-sucedido!');
-        loginForm.style.display = 'none';
-        registerForm.style.display = 'none';
-        expenseSection.style.display = 'block';
+        loginForm.reset();
+        showSection(expenseSection);
         displayExpenses();
     } else {
-        alert('Credenciais incorretas!');
+        alert('Credenciais inválidas!');
     }
-    loginForm.reset();
-}
+});
 
-// Função para verificar o status de login ao carregar a página
-function checkLoginStatus() {
+// Logout
+logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('loggedInUser');
+    showSection(loginSection);
+});
+
+// Adicionar despesa
+expenseForm.addEventListener('submit', (e) => {
+    e.preventDefault();
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    const name = document.getElementById('expense-name').value;
+    const amount = parseFloat(document.getElementById('expense-amount').value).toFixed(2);
+    const category = document.getElementById('expense-category').value;
+    const date = document.getElementById('expense-date').value;
 
-    if (loggedInUser) {
-        loginForm.style.display = 'none';
-        registerForm.style.display = 'none';
-        expenseSection.style.display = 'block';
-        displayExpenses();
-    } else {
-        expenseSection.style.display = 'none';
-    }
+    expenses.push({ name, amount, category, date, user: loggedInUser.email });
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+    displayExpenses();
+    expenseForm.reset();
+});
+
+// Exibir despesas
+function displayExpenses() {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    expenseList.innerHTML = '';
+
+    expenses
+        .filter(expense => expense.user === loggedInUser.email)
+        .forEach((expense, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                ${expense.name} - R$${expense.amount} - ${expense.category} - ${expense.date}
+                <button onclick="deleteExpense(${index})">Excluir</button>
+            `;
+            expenseList.appendChild(li);
+        });
 }
 
-// Adicionando eventos aos formulários
-registerForm.addEventListener('submit', registerUser);
-loginForm.addEventListener('submit', loginUser);
-expenseForm.addEventListener('submit', addExpense);
+// Excluir despesa
+function deleteExpense(index) {
+    expenses.splice(index, 1);
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+    displayExpenses();
+}
 
-// Verificar login ao carregar a página
-checkLoginStatus();
+// Verificar status de login ao carregar
+window.addEventListener('load', () => {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    if (loggedInUser) {
+        showSection(expenseSection);
+        displayExpenses();
+    } else {
+        showSection(registerSection);
+    }
+});
+
