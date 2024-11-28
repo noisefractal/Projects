@@ -2,6 +2,7 @@
 const registerSection = document.getElementById('register-section');
 const loginSection = document.getElementById('login-section');
 const expenseSection = document.getElementById('expense-section');
+const firstRegisterSection = document.getElementById('first-register-section'); // Tela inicial de registro
 const registerForm = document.getElementById('register-form');
 const loginForm = document.getElementById('login-form');
 const expenseForm = document.getElementById('expense-form');
@@ -14,12 +15,17 @@ let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
 
 // Funções de controle de exibição
 function showSection(section) {
+    firstRegisterSection.style.display = 'none';
     registerSection.style.display = 'none';
     loginSection.style.display = 'none';
     expenseSection.style.display = 'none';
-
     section.style.display = 'block';
 }
+
+// Tela de Registro Inicial (primeiro acesso)
+document.getElementById('first-register-btn').addEventListener('click', () => {
+    showSection(registerSection);
+});
 
 // Registro de usuário
 registerForm.addEventListener('submit', (e) => {
@@ -60,7 +66,7 @@ loginForm.addEventListener('submit', (e) => {
 // Logout
 logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('loggedInUser');
-    showSection(loginSection);
+    showSection(registerSection); // Redireciona para a tela de cadastro
 });
 
 // Adicionar despesa
@@ -109,7 +115,6 @@ window.addEventListener('load', () => {
         showSection(expenseSection);
         displayExpenses();
     } else {
-        showSection(registerSection);
+        showSection(firstRegisterSection);
     }
 });
-
