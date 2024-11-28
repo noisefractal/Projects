@@ -1,21 +1,21 @@
 // Capturando elementos do DOM
-const expenseForm = document.getElementById('expense-form');
-const expenseList = document.getElementById('expense-list');
 const registerForm = document.getElementById('register-form');
 const loginForm = document.getElementById('login-form');
-const expenseListTitle = document.getElementById('expense-list-title');
+const expenseForm = document.getElementById('expense-form');
+const expenseList = document.getElementById('expense-list');
+const expenseSection = document.getElementById('expense-section');
 
-// Armazenamento local para as despesas
+// Armazenamento local para despesas
 let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
 
-// Função para exibir as despesas do usuário logado
+// Função para exibir as despesas na lista
 function displayExpenses() {
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-    if (!loggedInUser) return;
+    expenseList.innerHTML = '';
 
+    // Filtrar despesas do usuário logado
     const userExpenses = expenses.filter(expense => expense.user === loggedInUser.email);
 
-    expenseList.innerHTML = '';
     userExpenses.forEach((expense, index) => {
         const li = document.createElement('li');
         li.innerHTML = `
@@ -37,11 +37,6 @@ function addExpense(e) {
 
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
 
-    if (!loggedInUser) {
-        alert('Faça login para adicionar despesas.');
-        return;
-    }
-
     const expense = {
         name: expenseName,
         amount: parseFloat(expenseAmount).toFixed(2),
@@ -58,11 +53,7 @@ function addExpense(e) {
 
 // Função para excluir uma despesa
 function deleteExpense(index) {
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-    const userExpenses = expenses.filter(expense => expense.user === loggedInUser.email);
-    const expenseToDelete = userExpenses[index];
-
-    expenses = expenses.filter(expense => expense !== expenseToDelete);
+    expenses.splice(index, 1);
     localStorage.setItem('expenses', JSON.stringify(expenses));
     displayExpenses();
 }
@@ -82,7 +73,6 @@ function registerUser(e) {
 
     users.push({ email, password });
     localStorage.setItem('users', JSON.stringify(users));
-
     alert('Usuário registrado com sucesso!');
     registerForm.reset();
 }
@@ -99,38 +89,34 @@ function loginUser(e) {
     if (validUser) {
         localStorage.setItem('loggedInUser', JSON.stringify(validUser));
         alert('Login bem-sucedido!');
-        toggleVisibility();
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'none';
+        expenseSection.style.display = 'block';
+        displayExpenses();
     } else {
         alert('Credenciais incorretas!');
     }
-
     loginForm.reset();
 }
 
-// Função para verificar o status do login e alternar visibilidade
-function toggleVisibility() {
+// Função para verificar o status de login ao carregar a página
+function checkLoginStatus() {
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
 
     if (loggedInUser) {
-        expenseForm.style.display = 'block';
-        expenseList.style.display = 'block';
-        expenseListTitle.style.display = 'block';
-        registerForm.style.display = 'none';
         loginForm.style.display = 'none';
+        registerForm.style.display = 'none';
+        expenseSection.style.display = 'block';
         displayExpenses();
     } else {
-        expenseForm.style.display = 'none';
-        expenseList.style.display = 'none';
-        expenseListTitle.style.display = 'none';
-        registerForm.style.display = 'block';
-        loginForm.style.display = 'block';
+        expenseSection.style.display = 'none';
     }
 }
 
-// Verifica o status do login ao carregar a página
-toggleVisibility();
-
-// Adiciona eventos para os formulários
+// Adicionando eventos aos formulários
 registerForm.addEventListener('submit', registerUser);
 loginForm.addEventListener('submit', loginUser);
 expenseForm.addEventListener('submit', addExpense);
+
+// Verificar login ao carregar a página
+checkLoginStatus();
