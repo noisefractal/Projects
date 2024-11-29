@@ -27,6 +27,11 @@ document.getElementById('first-register-btn').addEventListener('click', () => {
     showSection(registerSection);
 });
 
+// Botão para ir direto para a tela de cadastro (usuários antigos)
+document.getElementById('go-to-register-btn').addEventListener('click', () => {
+    showSection(registerSection);
+});
+
 // Registro de usuário
 registerForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -66,7 +71,7 @@ loginForm.addEventListener('submit', (e) => {
 // Logout
 logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('loggedInUser');
-    showSection(registerSection); // Redireciona para a tela de cadastro
+    showSection(loginSectionSection); // Redireciona para a tela de cadastro
 });
 
 // Adicionar despesa
@@ -84,6 +89,18 @@ expenseForm.addEventListener('submit', (e) => {
     expenseForm.reset();
 });
 
+// Função para editar uma despesa
+function editExpense(index) {
+    const expense = expenses[index];
+    document.getElementById('expense-name').value = expense.name;
+    document.getElementById('expense-amount').value = expense.amount;
+    document.getElementById('expense-category').value = expense.category;
+    document.getElementById('expense-date').value = expense.date;
+
+    // Remover a despesa antes de editar
+    deleteExpense(index);
+}
+
 // Exibir despesas
 function displayExpenses() {
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
@@ -96,6 +113,7 @@ function displayExpenses() {
             li.innerHTML = `
                 ${expense.name} - R$${expense.amount} - ${expense.category} - ${expense.date}
                 <button onclick="deleteExpense(${index})">Excluir</button>
+                <button onclick="editExpense(${index})">Editar</button>
             `;
             expenseList.appendChild(li);
         });
