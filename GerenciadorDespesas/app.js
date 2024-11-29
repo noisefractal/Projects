@@ -1,19 +1,16 @@
-// Captura de elementos do DOM
 const registerSection = document.getElementById('register-section');
 const loginSection = document.getElementById('login-section');
 const expenseSection = document.getElementById('expense-section');
-const firstRegisterSection = document.getElementById('first-register-section'); // Tela inicial de registro
+const firstRegisterSection = document.getElementById('first-register-section');
 const registerForm = document.getElementById('register-form');
 const loginForm = document.getElementById('login-form');
 const expenseForm = document.getElementById('expense-form');
 const expenseList = document.getElementById('expense-list');
 const logoutBtn = document.getElementById('logout-btn');
 
-// Variáveis globais
 let users = JSON.parse(localStorage.getItem('users')) || [];
 let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
 
-// Funções de controle de exibição
 function showSection(section) {
     firstRegisterSection.style.display = 'none';
     registerSection.style.display = 'none';
@@ -21,18 +18,12 @@ function showSection(section) {
     expenseSection.style.display = 'none';
     section.style.display = 'block';
 }
-
-// Tela de Registro Inicial (primeiro acesso)
 document.getElementById('first-register-btn').addEventListener('click', () => {
     showSection(registerSection);
 });
-
-// Botão para ir direto para a tela de cadastro (usuários antigos)
 document.getElementById('go-to-register-btn').addEventListener('click', () => {
     showSection(registerSection);
 });
-
-// Registro de usuário
 registerForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('register-email').value;
@@ -49,8 +40,6 @@ registerForm.addEventListener('submit', (e) => {
     registerForm.reset();
     showSection(loginSection);
 });
-
-// Login de usuário
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('login-email').value;
@@ -67,14 +56,11 @@ loginForm.addEventListener('submit', (e) => {
         alert('Credenciais inválidas!');
     }
 });
-
-// Logout
-logoutBtn.addEventListener('click', () => {
-    localStorage.removeItem('loggedInUser');
-    showSection(loginSectionSection); // Redireciona para a tela de cadastro
-});
-
-// Adicionar despesa
+logoutBtn.addEventListener('click', function () {
+        localStorage.removeItem('loggedInUser');
+        showSection(loginSection);
+        location.reload();
+    });
 expenseForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
@@ -88,8 +74,6 @@ expenseForm.addEventListener('submit', (e) => {
     displayExpenses();
     expenseForm.reset();
 });
-
-// Função para editar uma despesa
 function editExpense(index) {
     const expense = expenses[index];
     document.getElementById('expense-name').value = expense.name;
@@ -97,11 +81,8 @@ function editExpense(index) {
     document.getElementById('expense-category').value = expense.category;
     document.getElementById('expense-date').value = expense.date;
 
-    // Remover a despesa antes de editar
     deleteExpense(index);
 }
-
-// Exibir despesas
 function displayExpenses() {
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
     expenseList.innerHTML = '';
@@ -118,15 +99,11 @@ function displayExpenses() {
             expenseList.appendChild(li);
         });
 }
-
-// Excluir despesa
 function deleteExpense(index) {
     expenses.splice(index, 1);
     localStorage.setItem('expenses', JSON.stringify(expenses));
     displayExpenses();
 }
-
-// Verificar status de login ao carregar
 window.addEventListener('load', () => {
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
     if (loggedInUser) {
