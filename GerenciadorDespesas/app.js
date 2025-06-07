@@ -59,7 +59,6 @@ loginForm.addEventListener('submit', (e) => {
 logoutBtn.addEventListener('click', function () {
         localStorage.removeItem('loggedInUser');
         showSection(loginSection);
-        location.reload();
     });
 expenseForm.addEventListener('submit', (e) => {
     e.preventDefault();
