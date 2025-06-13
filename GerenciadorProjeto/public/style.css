@@ -60,10 +60,19 @@ body {
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-bottom: 10px;
 }
 
 #login-page button:hover {
   background-color: #0056b3;
+}
+
+#login-page button.register-btn {
+  background-color: #28a745;
+}
+
+#login-page button.register-btn:hover {
+  background-color: #1e7e34;
 }
 
 .header {
@@ -75,6 +84,17 @@ body {
 
 .header h2 {
   margin: 0;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-info span {
+  color: #666;
+  font-weight: 500;
 }
 
 .header button {
@@ -217,4 +237,10 @@ body {
 .green {
   background-color: #ccff90;
 }
-  
+
+.login-options {
+  text-align: center;
+  margin-top: 15px;
+  color: #666;
+  font-size: 14px;
+}
